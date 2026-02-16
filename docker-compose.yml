@@ -20,6 +20,15 @@ services:
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      # Настройки SMTP для Gmail
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_HOST=${SMTP_HOST}
+      - GF_SMTP_USER=${SMTP_USER}
+      - GF_SMTP_PASSWORD=${SMTP_PASS}
+      - GF_SMTP_FROM_ADDRESS=${SMTP_USER}
+      - GF_SMTP_FROM_NAME=Grafana Alerting
+    env_file:
+      - .env
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
@@ -65,7 +74,7 @@ services:
     depends_on:
       - postgres
 
-  # --- ТЕСТОВОЕ ПРИЛОЖЕНИЕ (Логи, Health Checks, Business Metrics) ---
+  # --- ТЕСТОВОЕ ПРИЛОЖЕНИЕ ---
   qa-app:
     image: python:3.9-slim
     container_name: qa-app
